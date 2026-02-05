@@ -362,29 +362,28 @@ int main() {
 ### ✅ Using C-style Array
 ```cpp
 #include <iostream>
-#include <limits> // Required for numeric_limits
-using namespace std; // Added for cout, endl
+using namespace std;
 
 int main() {
     int arr[] = {15, 3, 22, 9, 10};
-    int n = sizeof(arr) / sizeof(arr);
 
-    // Initialize max with the smallest possible integer value or the first element
-    // Check if array is not empty before accessing arr
-    int max_val = numeric_limits<int>::min(); // Safe for all integer ranges
-    if (n > 0) {
-        max_val = arr; // If array is guaranteed to have at least one element
-    }
+    // Correct way to calculate number of elements
+    int n = sizeof(arr) / sizeof(arr[0]);
 
+    // Assume first element is maximum
+    int max_val = arr[0];
+
+    // Start loop from index 1 (index 0 already used)
     for(int i = 1; i < n; i++) {
         if(arr[i] > max_val) {
             max_val = arr[i];
         }
     }
 
-    cout << "Maximum = " << max_val << endl; // Output: Maximum = 22
+    cout << "Maximum = " << max_val << endl;
     return 0;
 }
+
 ```
 **⚠️ Important**: Never initialize `max_val` with `0` if the array might contain all negative numbers.
 
