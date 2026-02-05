@@ -7,7 +7,7 @@ An array in C++ is a collection of elements of the same data type stored in cont
 *   **Store Multiple Values**: Hold a collection of related data items of the same type under a single variable name.
 *   **Fast Access**: Elements can be accessed directly and efficiently using their index (constant time O(1)).
 *   **Code Clarity & Conciseness**: Reduces the need for many individual variables, making code shorter and easier to manage.
-*   **Foundation for Data Structures**: Serve as the building blocks for more complex data structures like vectors, matrices, and hash tables.
+*   **Foundation for Data Structures**: Serve as the building blocks for more complex data structures like matrices.
 
 ## 3️⃣ Basic Syntax
 ```cpp
@@ -43,8 +43,8 @@ int a[] = {1, 2, 3}; // 'a' will have a size of 3.
 Elements are accessed using the array name followed by their index in square brackets `[]`.
 ```cpp
 int arr[] = {10, 20, 30};
-std::cout << arr;  // Output: 10 (the first element)
-std::cout << arr;  // Output: 30 (the third element)
+cout << arr;  // Output: 10 (the first element)
+cout << arr;  // Output: 30 (the third element)
 ```
 **⚠️ Important**: Array indices always start from `0`. The last element of an array of size `N` is at index `N-1`.
 
@@ -72,15 +72,16 @@ int data; // A 2x3x4 3D array
 Loops are commonly used to process each element in an array.
 ```cpp
 #include <iostream>
+using namespace std; // Added for cout, endl
 
 int main() {
     int a[] = {1, 2, 3, 4, 5};
     int n = sizeof(a) / sizeof(a); // Calculate number of elements
 
     for(int i = 0; i < n; i++) {
-        std::cout << a[i] << " ";
+        cout << a[i] << " ";
     }
-    std::cout << std::endl;
+    cout << endl;
     return 0;
 }
 ```
@@ -101,27 +102,28 @@ The memory address of an element can be calculated using its index:
 The `sizeof()` operator can be used to determine the size of an array in bytes and the number of elements.
 ```cpp
 #include <iostream>
+using namespace std; // Added for cout, endl
 
 int main() {
     int a[] = {2, 4, 14}; // Array of 3 integers
 
-    std::cout << "Size of array 'a' in bytes: " << sizeof(a) << std::endl; // Output: 12 (3 elements * 4 bytes/int)
-    std::cout << "Size of an int in bytes: " << sizeof(int) << std::endl;   // Output: 4
+    cout << "Size of array 'a' in bytes: " << sizeof(a) << endl; // Output: 12 (3 elements * 4 bytes/int)
+    cout << "Size of an int in bytes: " << sizeof(int) << endl;   // Output: 4
 
     // Calculate the number of elements in a static array
-    int n = sizeof(a) / sizeof(a); // Using a is safer than int, as type might change
-    std::cout << "Number of elements in 'a': " << n << std::endl; // Output: 3
+    int n = sizeof(a) / sizeof(a); // Corrected: Using a for element size
+    cout << "Number of elements in 'a': " << n << endl; // Output: 3
     return 0;
 }
 ```
-**⚠️ Important**: This `sizeof(array) / sizeof(element)` trick **only works for statically-sized C-style arrays**. It does **NOT** work for dynamically allocated arrays (e.g., `int* arr = new int[N];`) or `std::vector`. For `std::vector`, use `.size()` method.
+**⚠️ Important**: This `sizeof(array) / sizeof(element)` trick **only works for statically-sized C-style arrays**. It does **NOT** work for dynamically allocated arrays (e.g., `int* arr = new int[N];`).
 
 ## 🔟 Understanding Out-of-Bounds Access (Undefined Behavior)
 Accessing an array element using an index that is outside its valid range (0 to `size-1`) leads to **undefined behavior**.
 
 ```cpp
 int arr = {1, 2, 3, 4, 5};
-std::cout << arr; // ❌ Dangerous! Accessing arr is out of bounds.
+cout << arr; // ❌ Dangerous! Accessing arr is out of bounds for a size-5 array.
 ```
 **Consequences of Out-of-Bounds Access:**
 *   It might print a garbage value.
@@ -141,7 +143,7 @@ int a; // Arrays must have a positive size.
 ### ❌ Uninitialized Local Array (Garbage Values)
 ```cpp
 int a; // Local non-static array, elements contain garbage
-std::cout << a; // Output will be an unpredictable garbage value.
+cout << a; // Output will be an unpredictable garbage value.
 ```
 
 ### ✅ Zero Initialization (Recommended for C-style arrays)
@@ -149,55 +151,59 @@ std::cout << a; // Output will be an unpredictable garbage value.
 int a = {}; // All elements are initialized to 0.
 ```
 
-## 1️⃣2️⃣ Dynamic Sizing with `std::vector` (Modern C++ Best Practice)
-C-style arrays require their size to be known at compile time. If you need an array whose size is determined at runtime (e.g., by user input), `std::vector` is the preferred and safest solution in modern C++.
+## 1️⃣2️⃣ Dynamic Sizing (C-style Arrays)
+C-style arrays require their size to be known at compile time. If you need an array whose size is determined at runtime (e.g., by user input), you typically use dynamic memory allocation with `new` and `delete` or, for modern C++, `std::vector`.
 
-**⚠️ Variable Length Arrays (VLAs)**: `int arr[n];` where `n` is a variable, is a feature from C99 and is **not standard C++**. While some compilers support it as an extension, it's best to avoid it for portability and safety.
+**⚠️ Variable Length Arrays (VLAs)**: `int arr[n];` where `n` is a variable, is a feature from C99 and is **not standard C++**. While some compilers support it as an extension, it's best to avoid it for portability and safety. For fixed-size arrays, `n` must be a compile-time constant.
 
-### 🅰️ Taking Array Size as Input using `std::vector`
+### 🅰️ Taking Array Size as Input (using dynamic allocation)
 ```cpp
 #include <iostream>
-#include <vector> // Required for std::vector
 
 int main() {
     int n;
     std::cout << "Enter size of array: ";
     std::cin >> n;
 
-    // Declare a vector of 'n' integers. By default, elements are zero-initialized.
-    std::vector<int> arr(n);
+    // Dynamically allocate memory for 'n' integers
+    int* arr = new int[n];
 
-    std::cout << "Elements (default initialized to 0):\n";
-    for(int i = 0; i < arr.size(); i++) { // Use .size() for vectors
+    std::cout << "Elements (uninitialized, will contain garbage):\n";
+    for(int i = 0; i < n; i++) {
         std::cout << arr[i] << " ";
     }
     std::cout << std::endl;
+
+    delete[] arr; // Free the dynamically allocated memory
+    arr = nullptr; // Good practice to avoid dangling pointers
     return 0;
 }
 ```
 
-### 🅱️ Taking Array Elements as Input using `std::vector`
+### 🅱️ Taking Array Elements as Input (using dynamic allocation)
 ```cpp
 #include <iostream>
-#include <vector> // Required for std::vector
 
 int main() {
     int n;
     std::cout << "Enter number of elements: ";
     std::cin >> n;
 
-    std::vector<int> arr(n); // Creates a vector of 'n' integers
+    int* arr = new int[n]; // Dynamically allocate memory
 
     std::cout << "Enter " << n << " elements:\n";
-    for(int i = 0; i < arr.size(); i++) {
-        std::cin >> arr[i]; // Correctly take input into the vector
+    for(int i = 0; i < n; i++) {
+        std::cin >> arr[i]; // Take input into the array
     }
 
     std::cout << "Elements entered:\n";
-    for(int i = 0; i < arr.size(); i++) {
+    for(int i = 0; i < n; i++) {
         std::cout << arr[i] << " ";
     }
     std::cout << std::endl;
+
+    delete[] arr; // Free the dynamically allocated memory
+    arr = nullptr;
     return 0;
 }
 ```
@@ -209,7 +215,7 @@ int main() {
 *   **Foundation**: Basis for many other data structures.
 
 ## 1️⃣4️⃣ Limitations of Arrays
-*   **Fixed Size (Static Arrays)**: Once declared, the size of a C-style array cannot be changed. This can lead to wasted memory or overflow issues.
+*   **Fixed Size (C-style Arrays)**: Once declared, the size of a C-style array cannot be changed. This can lead to wasted memory or overflow issues. Dynamic allocation (`new`/`delete`) can mitigate this but adds complexity.
 *   **Homogeneous Data**: Can only store elements of the same data type.
 *   **Out-of-Bounds Errors**: No automatic bounds checking, making it prone to dangerous runtime errors.
 *   **Insertion/Deletion**: Inefficient for inserting or deleting elements in the middle, as it requires shifting many elements.
@@ -252,10 +258,9 @@ This inherent two-state nature makes binary (base-2) the most natural and effici
 *   **Homogeneous Elements**: Arrays store elements of the same data type only.
 *   **Contiguous Memory**: Elements are stored sequentially in memory.
 *   **Zero-Based Indexing**: The first element is at index `0`, the last at `size - 1`.
-*   **Fixed Size (C-style)**: Once declared, the size of a C-style array cannot be changed. Use `std::vector` for dynamic sizing.
+*   **Fixed Size (C-style)**: Once declared, the size of a C-style array cannot be changed. Use dynamic allocation (`new`/`delete`) for runtime sizing.
 *   **`sizeof()` for Static Arrays**: `sizeof(arr) / sizeof(arr[0])` gives the number of elements for static C-style arrays.
-*   **`std::vector` for Dynamic Arrays**: Always prefer `std::vector` for arrays whose size is not known at compile time or when you need dynamic resizing. Use `.size()` for `std::vector`.
-*   **Pass by Reference to Functions**: When passing arrays to functions, they often decay to pointers. To modify the original array, you typically pass a pointer or `std::vector` by reference.
+*   **Pass by Pointer to Functions**: When passing C-style arrays to functions, they decay to pointers. To modify the original array, you typically pass a pointer and its size.
 *   **Initialization**: Always initialize arrays to avoid garbage values. `int arr[5] = {};` initializes all to zero.
 
 ---
@@ -272,27 +277,25 @@ This inherent two-state nature makes binary (base-2) the most natural and effici
 2.  **Using Uninitialized Local Arrays**:
     ```cpp
     int arr;
-    std::cout << arr; // ❌ Prints garbage value
+    cout << arr; // ❌ Prints garbage value
     ```
     **Fix**: Always initialize arrays: `int arr[5] = {};` or `int arr[5] = {1,2,3,4,5};`.
 
 3.  **Variable Length Arrays (VLAs) in C++**:
     ```cpp
     int n;
-    std::cin >> n;
-    int arr[n]; // ❌ Not standard C++ (C99 feature)
+    cin >> n;
+    int arr[n]; // ❌ Not standard C++ (C99 feature), use dynamic allocation (new/delete) instead.
     ```
-    **Fix**: Use `std::vector<int> arr(n);`.
+    **Fix**: Use `int* arr = new int[n];` and remember `delete[] arr;`.
 
-4.  **Incorrect `sizeof()` with Pointers/Vectors**:
+4.  **Incorrect `sizeof()` with Pointers**:
     ```cpp
     void func(int* arr, int size) {
-        // int n = sizeof(arr) / sizeof(arr); // ❌ Incorrect! arr is a pointer here.
+        // int n = sizeof(arr) / sizeof(arr); // ❌ Incorrect! arr is a pointer here, not the array itself.
     }
-    std::vector<int> myVec(10);
-    // int n = sizeof(myVec) / sizeof(myVec); // ❌ Incorrect! Use myVec.size().
     ```
-    **Fix**: Pass size explicitly for C-style arrays in functions. Use `.size()` for `std::vector`.
+    **Fix**: Pass size explicitly for C-style arrays in functions.
 
 5.  **Initializing `max` with `0` for finding maximum**:
     ```cpp
@@ -301,10 +304,12 @@ This inherent two-state nature makes binary (base-2) the most natural and effici
     for (int x : arr) { if (x > max_val) max_val = x; }
     // Output: 0 (Incorrect)
     ```
-    **Fix**: Initialize `max_val` with the first element of the array, or use `std::numeric_limits<int>::min()`.
+    **Fix**: Initialize `max_val` with the first element of the array, or use `numeric_limits<int>::min()`.
     ```cpp
-    int max_val = arr; // Correct
-    // Or: int max_val = std::numeric_limits<int>::min();
+    #include <limits> // Required for numeric_limits
+    // ...
+    int max_val = arr; // Correct, assuming array is not empty
+    // Or: int max_val = numeric_limits<int>::min();
     ```
 
 6.  **Confusing Array Name with Pointer**:
@@ -312,15 +317,14 @@ This inherent two-state nature makes binary (base-2) the most natural and effici
     ```cpp
     int arr;
     // int* p = arr; // Valid
-    // arr = some_other_array; // ❌ Invalid
+    // arr = some_other_array; // ❌ Invalid: Cannot assign to an array type
     ```
 
 ---
 
 # 📘 Array Programs in C++ (Sum, Max, Reverse)
 
-Below are clean, exam-ready, beginner-friendly array programs.
-First with simple C-style arrays, then modern `std::vector` version (recommended).
+Below are clean, exam-ready, beginner-friendly array programs using C-style arrays.
 
 ## 1️⃣ Program to Find Sum of Array Elements
 
@@ -332,6 +336,7 @@ First with simple C-style arrays, then modern `std::vector` version (recommended
 ### ✅ Using C-style Array
 ```cpp
 #include <iostream>
+using namespace std; // Added for cout, endl
 
 int main() {
     int arr[] = {2, 4, 6, 8};
@@ -342,29 +347,7 @@ int main() {
         sum += arr[i];
     }
 
-    std::cout << "Sum = " << sum << std::endl; // Output: Sum = 20
-    return 0;
-}
-```
-
-### ⭐ Using `std::vector` (BEST PRACTICE)
-```cpp
-#include <iostream>
-#include <vector>
-
-int main() {
-    std::vector<int> arr = {2, 4, 6, 8};
-    int sum = 0;
-
-    for(int i = 0; i < arr.size(); i++) {
-        sum += arr[i];
-    }
-    // Alternative using range-based for loop (C++11 and later):
-    // for(int x : arr) {
-    //     sum += x;
-    // }
-
-    std::cout << "Sum = " << sum << std::endl; // Output: Sum = 20
+    cout << "Sum = " << sum << endl; // Output: Sum = 20
     return 0;
 }
 ```
@@ -379,61 +362,31 @@ int main() {
 ### ✅ Using C-style Array
 ```cpp
 #include <iostream>
-#include <limits> // Required for std::numeric_limits
+#include <limits> // Required for numeric_limits
+using namespace std; // Added for cout, endl
 
 int main() {
     int arr[] = {15, 3, 22, 9, 10};
     int n = sizeof(arr) / sizeof(arr);
 
     // Initialize max with the smallest possible integer value or the first element
-    int max_val = std::numeric_limits<int>::min(); // Safe for all integer ranges
-    // Or: int max_val = arr; // If array is guaranteed to have at least one element
+    // Check if array is not empty before accessing arr
+    int max_val = numeric_limits<int>::min(); // Safe for all integer ranges
+    if (n > 0) {
+        max_val = arr; // If array is guaranteed to have at least one element
+    }
 
-    for(int i = 0; i < n; i++) {
+    for(int i = 1; i < n; i++) {
         if(arr[i] > max_val) {
             max_val = arr[i];
         }
     }
 
-    std::cout << "Maximum = " << max_val << std::endl; // Output: Maximum = 22
+    cout << "Maximum = " << max_val << endl; // Output: Maximum = 22
     return 0;
 }
 ```
 **⚠️ Important**: Never initialize `max_val` with `0` if the array might contain all negative numbers.
-
-### ⭐ Using `std::vector` (BEST PRACTICE)
-```cpp
-#include <iostream>
-#include <vector>
-#include <limits> // Required for std::numeric_limits
-
-int main() {
-    std::vector<int> arr = {15, 3, 22, 9, 10};
-
-    if (arr.empty()) {
-        std::cout << "Array is empty, no maximum element." << std::endl;
-        return 1; // Indicate an error
-    }
-
-    int max_val = arr; // Safe if array is not empty
-    // Or: int max_val = std::numeric_limits<int>::min();
-
-    for(int i = 1; i < arr.size(); i++) {
-        if(arr[i] > max_val) {
-            max_val = arr[i];
-        }
-    }
-    // Alternative using range-based for loop (C++11 and later):
-    // for(int x : arr) {
-    //     if (x > max_val) {
-    //         max_val = x;
-    //     }
-    // }
-
-    std::cout << "Maximum = " << max_val << std::endl; // Output: Maximum = 22
-    return 0;
-}
-```
 
 ## 3️⃣ Program to Reverse an Array (In-Place)
 
@@ -446,7 +399,8 @@ int main() {
 ### ✅ Using C-style Array
 ```cpp
 #include <iostream>
-#include <algorithm> // Required for std::swap
+#include <algorithm> // Required for swap
+using namespace std; // Added for cout, endl
 
 int main() {
     int arr[] = {1, 2, 3, 4, 5};
@@ -457,7 +411,7 @@ int main() {
 
     while(start < end) {
         // Swap elements at start and end
-        std::swap(arr[start], arr[end]);
+        swap(arr[start], arr[end]);
         // Or manually:
         // int temp = arr[start];
         // arr[start] = arr[end];
@@ -467,40 +421,11 @@ int main() {
         end--;
     }
 
-    std::cout << "Reversed Array:\n";
+    cout << "Reversed Array:\n";
     for(int i = 0; i < n; i++) {
-        std::cout << arr[i] << " ";
+        cout << arr[i] << " ";
     }
-    std::cout << std::endl; // Output: 5 4 3 2 1
-    return 0;
-}
-```
-
-### ⭐ Using `std::vector` (BEST PRACTICE)
-```cpp
-#include <iostream>
-#include <vector>
-#include <algorithm> // Required for std::swap or std::reverse
-
-int main() {
-    std::vector<int> arr = {1, 2, 3, 4, 5};
-
-    int start = 0;
-    int end = arr.size() - 1;
-
-    while(start < end) {
-        std::swap(arr[start], arr[end]);
-        start++;
-        end--;
-    }
-    // Alternative using std::reverse algorithm:
-    // std::reverse(arr.begin(), arr.end());
-
-    std::cout << "Reversed Array:\n";
-    for(int x : arr) { // Range-based for loop for easy iteration
-        std::cout << x << " ";
-    }
-    std::cout << std::endl; // Output: 5 4 3 2 1
+    cout << endl; // Output: 5 4 3 2 1
     return 0;
 }
 ```
