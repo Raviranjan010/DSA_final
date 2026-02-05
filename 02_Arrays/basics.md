@@ -1,223 +1,516 @@
----
+# 📘 Arrays in C++ — Complete Master Guide
 
-# 📚 C++ Notes: Arrays and Decimal Numbers
+## 1️⃣ What is an Array? (Core Idea)
+An array in C++ is a collection of elements of the same data type stored in contiguous memory locations, accessed using a single name and an index.
 
-## 🎯 Arrays in C++
+## 2️⃣ Why Use Arrays?
+*   **Store Multiple Values**: Hold a collection of related data items of the same type under a single variable name.
+*   **Fast Access**: Elements can be accessed directly and efficiently using their index (constant time O(1)).
+*   **Code Clarity & Conciseness**: Reduces the need for many individual variables, making code shorter and easier to manage.
+*   **Foundation for Data Structures**: Serve as the building blocks for more complex data structures like vectors, matrices, and hash tables.
 
-An array is a fundamental data structure in C++ used to store a collection of elements of the same data type in contiguous memory locations. These elements are accessed using a single variable name and an index.
-
-### 🔹 1. Why Arrays Are Used
-
-*   **Store Multiple Values:** Allows storing a collection of related data items under a single name, reducing the need for many individual variables.
-*   **Faster Access:** Elements can be accessed directly and quickly using their index (O(1) time complexity), making data retrieval very efficient.
-*   **Simplifies Code:** Organizes homogeneous data efficiently, making code cleaner and easier to manage for large datasets.
-*   **Efficient Memory Organization:** Data is stored contiguously, which can improve cache performance and overall program speed.
-
-### 🔹 2. Basic Syntax
-
-To declare an array, you specify the data type, the array name, and its size (number of elements) in square brackets.
-
+## 3️⃣ Basic Syntax
 ```cpp
 data_type array_name[size];
 ```
-
-**Example:**
-
-```cpp
-int marks; // Declares an array named 'marks' that can hold 5 integer values.
-```
-
-### 🔹 3. Array Initialization
-
-Arrays can be initialized at the time of declaration.
-
-*   **Full Initialization:**
-    ```cpp
-    int a = {10, 20, 30, 40, 50};
-    ```
-*   **Partial Initialization:** If fewer elements are provided than the array size, the remaining elements are automatically initialized to `0` for global/static arrays. For local arrays, if at least one element is initialized, the rest are zero-initialized.
-    ```cpp
-    int b = {1, 2}; // b will be {1, 2, 0, 0, 0}
-    ```
-*   **Zero Initialization (All elements to 0):**
-    ```cpp
-    int c = {}; // All 5 elements will be initialized to 0.
-    int d[] = {0}; // An array of size 1, with element 0.
-    ```
-*   **Uninitialized Local Arrays:** If a local array is declared without any initialization, its elements will contain **garbage values**. Accessing these values leads to **undefined behavior**.
-    ```cpp
-    int f; // 'f' contains garbage values.
-    // cout << f; // ⚠️ Dangerous! Undefined behavior.
-    ```
-
-### 🔹 4. Accessing Array Elements
-
-Array elements are accessed using their index, which starts from `0`.
-
-```cpp
-cout << a; // Accesses the first element (value: 10)
-cout << a; // Accesses the fifth (and last) element (value: 50)
-```
-
-**⚠️ Important:** Index starts from `0`, not `1`. For an array of size `N`, valid indices range from `0` to `N-1`. Accessing `a[N]` or `a[-1]` is an **out-of-bounds access** and results in **undefined behavior**.
-
-### 🔹 5. Types of Arrays in C++
-
-*   **One-Dimensional Array:** A linear list of elements.
-    ```cpp
-    int arr;
-    ```
-*   **Two-Dimensional Array:** An array of arrays, often visualized as a matrix (rows and columns).
-    ```cpp
-    int matrix; // A 3x3 matrix
-    ```
-*   **Multi-Dimensional Array:** Arrays with more than two dimensions.
-    ```cpp
-    int data; // A 2x3x4 array
-    ```
-
-### 🔹 6. Traversing an Array (Using Loops)
-
-To process each element in an array, loops are commonly used.
-
-```cpp
-// Using a traditional for loop
-for(int i = 0; i < 5; i++) {
-    cout << a[i] << " ";
-}
-
-// Using a range-based for loop (C++11 and later)
-// This works for fixed-size arrays and std::vector
-for (int element : a) { // 'a' must be a fixed-size array or std::vector
-    cout << element << " ";
-}
-```
-
-### 🔹 7. Memory Concept (Important)
-
-Arrays are stored in **contiguous memory locations**. This means elements are placed one after another without any gaps.
-
-**Address Formula:**
-The address of an element can be calculated using the following formula:
-`Address(element_at_index) = base_address + index × size_of_data_type`
-
-**Example:** If `base_address` of an `int` array is `1000` and `sizeof(int)` is `4` bytes:
-*   `Address(arr[0]) = 1000 + 0 * 4 = 1000`
-*   `Address(arr[1]) = 1000 + 1 * 4 = 1004`
-*   `Address(arr[2]) = 1000 + 2 * 4 = 1008`
-
-### 🔹 8. `sizeof` Operator for Array Size
-
-The `sizeof` operator can be used to determine the size of an array.
-
-*   `sizeof(array)`: Returns the total size of the array in bytes.
-*   `sizeof(array[0])` (or `sizeof(data_type)`): Returns the size of a single element in bytes.
-*   **Trick:** `Number of elements = sizeof(array) / sizeof(array[0])`. This works reliably only for C-style arrays whose size is known at compile time (i.e., not when passed to a function where it decays to a pointer, or for `std::vector`).
-
 **Example:**
 ```cpp
-int arr[] = {2, 4, 14};
-cout << "Total size in bytes: " << sizeof(arr) << endl; // Output: 12 (assuming int is 4 bytes)
-cout << "Size of one element: " << sizeof(arr) << endl; // Output: 4
-cout << "Number of elements: " << sizeof(arr) / sizeof(arr) << endl; // Output: 3
+int marks; // Declares an array named 'marks' that can hold 5 integers.
 ```
 
-### 🔹 9. Advantages
+## 4️⃣ Array Initialization
 
-*   **Easy Data Management:** Simple to declare and use for homogeneous data.
-*   **Fast Access:** Direct access to any element using its index (O(1)).
-*   **Code Cleaner:** Organizes related data efficiently.
+### 🅰️ Full Initialization
+All elements are explicitly assigned values.
+```cpp
+int a = {10, 20, 30, 40, 50};
+```
 
-### 🔹 10. Limitations
+### 🅱️ Partial Initialization
+If fewer values are provided than the array size, the remaining elements are **zero-initialized**.
+```cpp
+int a = {10, 20}; // a will be {10, 20, 0, 0, 0}
+```
+**Note**: For local non-static arrays, if no initializer is provided at all (e.g., `int arr[5];`), the elements will contain **garbage values**. If you use `int arr[5] = {};` or `int arr[5] = {0};`, all elements will be zero-initialized.
 
-*   **Fixed Size:** Once declared, the size of a C-style array cannot be changed dynamically. This can lead to memory wastage if too much is allocated or overflow if too little.
-*   **Cannot Store Mixed Data Types:** All elements must be of the same data type.
-*   **No Bounds Checking:** C++ does not automatically check if an array access is within its valid bounds. This means `arr[100]` on an array of size 5 will compile but lead to **undefined behavior** at runtime, which is a critical source of bugs and security vulnerabilities.
+### 🆎 Automatic Size Detection
+The compiler determines the size of the array based on the number of initializers.
+```cpp
+int a[] = {1, 2, 3}; // 'a' will have a size of 3.
+```
 
-### 🔹 11. Key Points to Remember & Tricks (Exam-Friendly)
+## 5️⃣ Accessing Array Elements
+Elements are accessed using the array name followed by their index in square brackets `[]`.
+```cpp
+int arr[] = {10, 20, 30};
+std::cout << arr;  // Output: 10 (the first element)
+std::cout << arr;  // Output: 30 (the third element)
+```
+**⚠️ Important**: Array indices always start from `0`. The last element of an array of size `N` is at index `N-1`.
 
-*   **Homogeneous Data:** Arrays can only store elements of a single data type.
-*   **Zero-Based Indexing:** Always remember that array indices start from `0`.
-*   **Constant Size:** For C-style arrays, the size must be a compile-time constant. Using a variable for size (Variable Length Arrays - VLAs) is a C99 feature and not standard C++. For dynamic sizing, use `std::vector`.
-*   **Out-of-Bounds Access:** Accessing an array element outside its declared range (e.g., `arr[size]` or `arr[-1]`) results in **undefined behavior**. This is a critical source of bugs and security vulnerabilities.
-*   **Uninitialized Elements Behavior:**
-    *   Global or static arrays are zero-initialized by default.
-    *   Local arrays, if partially initialized, have their remaining elements zero-initialized.
-    *   Local arrays, if not initialized at all, contain **garbage values**.
-*   **Arrays Decay to Pointers:** When a C-style array is passed to a function, it "decays" into a pointer to its first element. This means the function loses information about the array's original size. You typically pass the size as a separate argument.
-*   **Modern C++ Alternatives:**
-    *   `std::array` (C++11): A fixed-size array wrapper that provides container-like features and doesn't decay to a pointer. It offers compile-time size checking and is safer than raw C-style arrays.
-    *   `std::vector`: A dynamic array that can grow and shrink in size at runtime. It's generally preferred over raw C-style arrays for most use cases due to its flexibility, safety features (like bounds checking with `at()`), and automatic memory management.
+## 6️⃣ Types of Arrays in C++
 
-### 🔹 12. Real-Life Example
+### 🅰️ One-Dimensional Array
+A linear collection of elements.
+```cpp
+int arr; // An array of 5 integers
+```
+
+### 🅱️ Two-Dimensional Array (Matrices)
+An array of arrays, often used to represent tables or grids.
+```cpp
+int matrix; // A 3x3 matrix
+```
+
+### 🆎 Multi-Dimensional Array
+Arrays with more than two dimensions.
+```cpp
+int data; // A 2x3x4 3D array
+```
+
+## 7️⃣ Traversing an Array
+Loops are commonly used to process each element in an array.
+```cpp
+#include <iostream>
+
+int main() {
+    int a[] = {1, 2, 3, 4, 5};
+    int n = sizeof(a) / sizeof(a); // Calculate number of elements
+
+    for(int i = 0; i < n; i++) {
+        std::cout << a[i] << " ";
+    }
+    std::cout << std::endl;
+    return 0;
+}
+```
+
+## 8️⃣ Memory Concept (Crucial for Understanding Pointers)
+Arrays are stored in **contiguous memory locations**. This means elements are placed right next to each other in memory.
+
+**Address Calculation:**
+The memory address of an element can be calculated using its index:
+`Address of arr[i] = base_address + i × sizeof(data_type)`
+
+**Example:** If `int arr[5]` starts at address `1000` and `sizeof(int)` is `4` bytes:
+*   `arr[0]` is at `1000`
+*   `arr[1]` is at `1000 + 1 * 4 = 1004`
+*   `arr[2]` is at `1000 + 2 * 4 = 1008`
+
+## 9️⃣ `sizeof()` Operator with Arrays
+The `sizeof()` operator can be used to determine the size of an array in bytes and the number of elements.
+```cpp
+#include <iostream>
+
+int main() {
+    int a[] = {2, 4, 14}; // Array of 3 integers
+
+    std::cout << "Size of array 'a' in bytes: " << sizeof(a) << std::endl; // Output: 12 (3 elements * 4 bytes/int)
+    std::cout << "Size of an int in bytes: " << sizeof(int) << std::endl;   // Output: 4
+
+    // Calculate the number of elements in a static array
+    int n = sizeof(a) / sizeof(a); // Using a is safer than int, as type might change
+    std::cout << "Number of elements in 'a': " << n << std::endl; // Output: 3
+    return 0;
+}
+```
+**⚠️ Important**: This `sizeof(array) / sizeof(element)` trick **only works for statically-sized C-style arrays**. It does **NOT** work for dynamically allocated arrays (e.g., `int* arr = new int[N];`) or `std::vector`. For `std::vector`, use `.size()` method.
+
+## 🔟 Understanding Out-of-Bounds Access (Undefined Behavior)
+Accessing an array element using an index that is outside its valid range (0 to `size-1`) leads to **undefined behavior**.
 
 ```cpp
-int temperature;   // Storing temperature of 7 days
-string weekdays = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"}; // Storing names of weekdays
+int arr = {1, 2, 3, 4, 5};
+std::cout << arr; // ❌ Dangerous! Accessing arr is out of bounds.
 ```
+**Consequences of Out-of-Bounds Access:**
+*   It might print a garbage value.
+*   It might print `0`.
+*   It might crash your program (segmentation fault).
+*   It might corrupt other parts of your program's memory, leading to subtle bugs that are hard to trace.
+
+**✅ Best Practice**: **NEVER** access elements outside the declared bounds of an array.
+
+## 1️⃣1️⃣ Invalid Declarations & Best Practices
+
+### ❌ Not Allowed (Compile-time Error)
+```cpp
+int a; // Arrays must have a positive size.
+```
+
+### ❌ Uninitialized Local Array (Garbage Values)
+```cpp
+int a; // Local non-static array, elements contain garbage
+std::cout << a; // Output will be an unpredictable garbage value.
+```
+
+### ✅ Zero Initialization (Recommended for C-style arrays)
+```cpp
+int a = {}; // All elements are initialized to 0.
+```
+
+## 1️⃣2️⃣ Dynamic Sizing with `std::vector` (Modern C++ Best Practice)
+C-style arrays require their size to be known at compile time. If you need an array whose size is determined at runtime (e.g., by user input), `std::vector` is the preferred and safest solution in modern C++.
+
+**⚠️ Variable Length Arrays (VLAs)**: `int arr[n];` where `n` is a variable, is a feature from C99 and is **not standard C++**. While some compilers support it as an extension, it's best to avoid it for portability and safety.
+
+### 🅰️ Taking Array Size as Input using `std::vector`
+```cpp
+#include <iostream>
+#include <vector> // Required for std::vector
+
+int main() {
+    int n;
+    std::cout << "Enter size of array: ";
+    std::cin >> n;
+
+    // Declare a vector of 'n' integers. By default, elements are zero-initialized.
+    std::vector<int> arr(n);
+
+    std::cout << "Elements (default initialized to 0):\n";
+    for(int i = 0; i < arr.size(); i++) { // Use .size() for vectors
+        std::cout << arr[i] << " ";
+    }
+    std::cout << std::endl;
+    return 0;
+}
+```
+
+### 🅱️ Taking Array Elements as Input using `std::vector`
+```cpp
+#include <iostream>
+#include <vector> // Required for std::vector
+
+int main() {
+    int n;
+    std::cout << "Enter number of elements: ";
+    std::cin >> n;
+
+    std::vector<int> arr(n); // Creates a vector of 'n' integers
+
+    std::cout << "Enter " << n << " elements:\n";
+    for(int i = 0; i < arr.size(); i++) {
+        std::cin >> arr[i]; // Correctly take input into the vector
+    }
+
+    std::cout << "Elements entered:\n";
+    for(int i = 0; i < arr.size(); i++) {
+        std::cout << arr[i] << " ";
+    }
+    std::cout << std::endl;
+    return 0;
+}
+```
+
+## 1️⃣3️⃣ Advantages of Arrays
+*   **Fast Access**: O(1) time complexity for accessing any element by index.
+*   **Simple Structure**: Easy to understand and implement.
+*   **Efficient Memory Usage**: Elements are stored contiguously, leading to good cache performance.
+*   **Foundation**: Basis for many other data structures.
+
+## 1️⃣4️⃣ Limitations of Arrays
+*   **Fixed Size (Static Arrays)**: Once declared, the size of a C-style array cannot be changed. This can lead to wasted memory or overflow issues.
+*   **Homogeneous Data**: Can only store elements of the same data type.
+*   **Out-of-Bounds Errors**: No automatic bounds checking, making it prone to dangerous runtime errors.
+*   **Insertion/Deletion**: Inefficient for inserting or deleting elements in the middle, as it requires shifting many elements.
 
 ---
 
-## 🔢 Decimal Numbers in C++
+# 🔢 Number Systems & Decimal Logic
 
-Decimal numbers, also known as floating-point numbers, are used to represent real numbers (numbers with fractional parts). C++ provides several data types for this purpose, differing in precision and range.
+Understanding number systems is foundational, especially when working with low-level concepts like memory and data representation. Computers fundamentally operate in binary.
 
-### 🔹 1. Data Types for Decimal Numbers
+## 1️⃣ What is a Number System?
+A number system defines how numbers are represented using digits and a base (radix).
 
-*   **`float`**: Represents a single-precision floating-point number.
-    *   Typically occupies 4 bytes.
-    *   Offers about 6-7 decimal digits of precision.
-    *   **Example:** `float pi = 3.14159f;` (Note the `f` suffix for float literals; without it, `3.14159` is treated as a `double`).
-*   **`double`**: Represents a double-precision floating-point number.
-    *   Typically occupies 8 bytes.
-    *   Offers about 15-17 decimal digits of precision. This is the most commonly used floating-point type and is the default for floating-point literals.
-    *   **Example:** `double gravity = 9.80665;`
-*   **`long double`**: Represents an extended-precision floating-point number.
-    *   Size varies by compiler and platform (often 10 or 16 bytes).
-    *   Offers even greater precision than `double`.
-    *   **Example:** `long double very_precise_val = 1.234567890123456789L;` (Note the `L` suffix).
+| Number System | Base | Digits Used | Example |
+| :------------ | :--- | :---------- | :------ |
+| **Decimal**   | 10   | 0–9         | 12, 99, 105 |
+| **Binary**    | 2    | 0, 1        | 101, 1100 |
+| **Octal**     | 8    | 0–7         | 17, 24  |
+| **Hexadecimal** | 16   | 0–9, A–F    | 1A, F2, B5 |
 
-### 🔹 2. Usage in Arrays
+## 2️⃣ Decimal Number System (Base-10)
+The decimal system is the number system we use daily. It uses 10 unique digits (0–9). Each digit's position in a number represents a power of 10.
 
-Arrays can store decimal numbers just like integers, by specifying the appropriate floating-point data type.
+### Example: Breakdown of `739`
+*   `7` is in the hundreds place: $7 \times 10^2 = 700$
+*   `3` is in the tens place: $3 \times 10^1 = 30$
+*   `9` is in the units place: $9 \times 10^0 = 9$
+*   **Total**: $700 + 30 + 9 = 739$
 
-**Examples:**
+### Why do computers use Binary?
+Computers are built from transistors, which act as tiny switches. These switches have only two stable states:
+*   **ON** (High Voltage) = **1**
+*   **OFF** (Low Voltage) = **0**
+This inherent two-state nature makes binary (base-2) the most natural and efficient number system for computers.
 
+---
+
+# 🧠 MASTER TRICKS & POINTS TO REMEMBER (Arrays)
+
+*   **Homogeneous Elements**: Arrays store elements of the same data type only.
+*   **Contiguous Memory**: Elements are stored sequentially in memory.
+*   **Zero-Based Indexing**: The first element is at index `0`, the last at `size - 1`.
+*   **Fixed Size (C-style)**: Once declared, the size of a C-style array cannot be changed. Use `std::vector` for dynamic sizing.
+*   **`sizeof()` for Static Arrays**: `sizeof(arr) / sizeof(arr[0])` gives the number of elements for static C-style arrays.
+*   **`std::vector` for Dynamic Arrays**: Always prefer `std::vector` for arrays whose size is not known at compile time or when you need dynamic resizing. Use `.size()` for `std::vector`.
+*   **Pass by Reference to Functions**: When passing arrays to functions, they often decay to pointers. To modify the original array, you typically pass a pointer or `std::vector` by reference.
+*   **Initialization**: Always initialize arrays to avoid garbage values. `int arr[5] = {};` initializes all to zero.
+
+---
+
+# ❌ Common Array Mistakes (Exam Traps & Pitfalls)
+
+1.  **Out-of-Bounds Access**:
+    ```cpp
+    int arr;
+    arr = 10; // ❌ CRASH/UNDEFINED BEHAVIOR
+    ```
+    **Fix**: Ensure indices are always within `0` to `size-1`.
+
+2.  **Using Uninitialized Local Arrays**:
+    ```cpp
+    int arr;
+    std::cout << arr; // ❌ Prints garbage value
+    ```
+    **Fix**: Always initialize arrays: `int arr[5] = {};` or `int arr[5] = {1,2,3,4,5};`.
+
+3.  **Variable Length Arrays (VLAs) in C++**:
+    ```cpp
+    int n;
+    std::cin >> n;
+    int arr[n]; // ❌ Not standard C++ (C99 feature)
+    ```
+    **Fix**: Use `std::vector<int> arr(n);`.
+
+4.  **Incorrect `sizeof()` with Pointers/Vectors**:
+    ```cpp
+    void func(int* arr, int size) {
+        // int n = sizeof(arr) / sizeof(arr); // ❌ Incorrect! arr is a pointer here.
+    }
+    std::vector<int> myVec(10);
+    // int n = sizeof(myVec) / sizeof(myVec); // ❌ Incorrect! Use myVec.size().
+    ```
+    **Fix**: Pass size explicitly for C-style arrays in functions. Use `.size()` for `std::vector`.
+
+5.  **Initializing `max` with `0` for finding maximum**:
+    ```cpp
+    int arr[] = {-5, -2, -8};
+    int max_val = 0; // ❌ If all numbers are negative, this is wrong.
+    for (int x : arr) { if (x > max_val) max_val = x; }
+    // Output: 0 (Incorrect)
+    ```
+    **Fix**: Initialize `max_val` with the first element of the array, or use `std::numeric_limits<int>::min()`.
+    ```cpp
+    int max_val = arr; // Correct
+    // Or: int max_val = std::numeric_limits<int>::min();
+    ```
+
+6.  **Confusing Array Name with Pointer**:
+    While an array name often decays to a pointer to its first element, they are not identical. You cannot reassign an array name.
+    ```cpp
+    int arr;
+    // int* p = arr; // Valid
+    // arr = some_other_array; // ❌ Invalid
+    ```
+
+---
+
+# 📘 Array Programs in C++ (Sum, Max, Reverse)
+
+Below are clean, exam-ready, beginner-friendly array programs.
+First with simple C-style arrays, then modern `std::vector` version (recommended).
+
+## 1️⃣ Program to Find Sum of Array Elements
+
+### 🔹 Logic
+1.  Initialize a `sum` variable to `0`.
+2.  Iterate through each element of the array.
+3.  Add each element's value to `sum`.
+
+### ✅ Using C-style Array
 ```cpp
-// Storing daily temperatures (float array)
-float dailyTemperatures = {25.5f, 26.1f, 24.9f, 27.0f, 28.2f, 26.8f, 25.0f};
+#include <iostream>
 
-// Storing product prices (double array)
-double productPrices = {19.99, 45.50, 12.75, 99.00, 5.25};
+int main() {
+    int arr[] = {2, 4, 6, 8};
+    int n = sizeof(arr) / sizeof(arr); // Calculate number of elements
+    int sum = 0;
 
-// Accessing elements
-cout << "Today's temperature: " << dailyTemperatures << " degrees Celsius." << endl;
-cout << "Price of item 3: $" << productPrices << endl;
+    for(int i = 0; i < n; i++) {
+        sum += arr[i];
+    }
+
+    std::cout << "Sum = " << sum << std::endl; // Output: Sum = 20
+    return 0;
+}
 ```
 
-### 🔹 3. Key Points & Tricks for Decimal Numbers
+### ⭐ Using `std::vector` (BEST PRACTICE)
+```cpp
+#include <iostream>
+#include <vector>
 
-*   **Precision Limitations:** Floating-point numbers have finite precision. This means they cannot represent all real numbers exactly, leading to potential rounding errors. For example, `0.1` cannot be represented exactly in binary floating-point.
-*   **Avoid Direct Equality Comparisons (`==`):** Due to precision issues, comparing two floating-point numbers directly for equality (`a == b`) is generally unreliable. Instead, check if their absolute difference is very small (within a defined epsilon).
-    ```cpp
-    // Bad:
-    // if (a == b)
+int main() {
+    std::vector<int> arr = {2, 4, 6, 8};
+    int sum = 0;
 
-    // Good:
-    // #include <cmath> // For std::abs
-    // const double EPSILON = 1e-9; // A small tolerance value
-    // if (std::abs(a - b) < EPSILON) {
-    //     // Numbers are considered equal
+    for(int i = 0; i < arr.size(); i++) {
+        sum += arr[i];
+    }
+    // Alternative using range-based for loop (C++11 and later):
+    // for(int x : arr) {
+    //     sum += x;
     // }
-    ```
-*   **Performance:** `float` operations can sometimes be faster than `double` operations, but modern CPUs are highly optimized for `double`. Use `double` by default unless memory or specific performance constraints dictate `float`.
-*   **Input/Output Formatting:** Use `std::fixed` and `std::setprecision` from the `<iomanip>` header to control the display format of floating-point numbers.
-    ```cpp
-    #include <iomanip> // For std::fixed, std::setprecision
-    // ...
-    double val = 123.456789;
-    cout << std::fixed << std::setprecision(2) << val << endl; // Output: 123.46
-    cout << std::setprecision(5) << val << endl; // Output: 123.46000 (still fixed due to previous std::fixed)
-    cout << std::defaultfloat << std::setprecision(5) << val << endl; // Output: 123.46 (defaultfloat removes fixed)
-    ```
-*   **Integer vs. Floating-Point Division:** Be mindful of integer division. `5 / 2` results in `2` (integer), while `5.0 / 2.0` or `5 / 2.0` results in `2.5` (floating-point).
+
+    std::cout << "Sum = " << sum << std::endl; // Output: Sum = 20
+    return 0;
+}
+```
+
+## 2️⃣ Program to Find Maximum Element
+
+### 🔹 Logic
+1.  Assume the first element of the array is the maximum.
+2.  Iterate through the rest of the array (from the second element).
+3.  If any element is greater than the current maximum, update the maximum.
+
+### ✅ Using C-style Array
+```cpp
+#include <iostream>
+#include <limits> // Required for std::numeric_limits
+
+int main() {
+    int arr[] = {15, 3, 22, 9, 10};
+    int n = sizeof(arr) / sizeof(arr);
+
+    // Initialize max with the smallest possible integer value or the first element
+    int max_val = std::numeric_limits<int>::min(); // Safe for all integer ranges
+    // Or: int max_val = arr; // If array is guaranteed to have at least one element
+
+    for(int i = 0; i < n; i++) {
+        if(arr[i] > max_val) {
+            max_val = arr[i];
+        }
+    }
+
+    std::cout << "Maximum = " << max_val << std::endl; // Output: Maximum = 22
+    return 0;
+}
+```
+**⚠️ Important**: Never initialize `max_val` with `0` if the array might contain all negative numbers.
+
+### ⭐ Using `std::vector` (BEST PRACTICE)
+```cpp
+#include <iostream>
+#include <vector>
+#include <limits> // Required for std::numeric_limits
+
+int main() {
+    std::vector<int> arr = {15, 3, 22, 9, 10};
+
+    if (arr.empty()) {
+        std::cout << "Array is empty, no maximum element." << std::endl;
+        return 1; // Indicate an error
+    }
+
+    int max_val = arr; // Safe if array is not empty
+    // Or: int max_val = std::numeric_limits<int>::min();
+
+    for(int i = 1; i < arr.size(); i++) {
+        if(arr[i] > max_val) {
+            max_val = arr[i];
+        }
+    }
+    // Alternative using range-based for loop (C++11 and later):
+    // for(int x : arr) {
+    //     if (x > max_val) {
+    //         max_val = x;
+    //     }
+    // }
+
+    std::cout << "Maximum = " << max_val << std::endl; // Output: Maximum = 22
+    return 0;
+}
+```
+
+## 3️⃣ Program to Reverse an Array (In-Place)
+
+### 🔹 Logic
+1.  Use two pointers: `start` at the beginning and `end` at the end of the array.
+2.  Swap the elements at `start` and `end`.
+3.  Move `start` one step forward and `end` one step backward.
+4.  Continue until `start` crosses `end`.
+
+### ✅ Using C-style Array
+```cpp
+#include <iostream>
+#include <algorithm> // Required for std::swap
+
+int main() {
+    int arr[] = {1, 2, 3, 4, 5};
+    int n = sizeof(arr) / sizeof(arr);
+
+    int start = 0;
+    int end = n - 1;
+
+    while(start < end) {
+        // Swap elements at start and end
+        std::swap(arr[start], arr[end]);
+        // Or manually:
+        // int temp = arr[start];
+        // arr[start] = arr[end];
+        // arr[end] = temp;
+
+        start++;
+        end--;
+    }
+
+    std::cout << "Reversed Array:\n";
+    for(int i = 0; i < n; i++) {
+        std::cout << arr[i] << " ";
+    }
+    std::cout << std::endl; // Output: 5 4 3 2 1
+    return 0;
+}
+```
+
+### ⭐ Using `std::vector` (BEST PRACTICE)
+```cpp
+#include <iostream>
+#include <vector>
+#include <algorithm> // Required for std::swap or std::reverse
+
+int main() {
+    std::vector<int> arr = {1, 2, 3, 4, 5};
+
+    int start = 0;
+    int end = arr.size() - 1;
+
+    while(start < end) {
+        std::swap(arr[start], arr[end]);
+        start++;
+        end--;
+    }
+    // Alternative using std::reverse algorithm:
+    // std::reverse(arr.begin(), arr.end());
+
+    std::cout << "Reversed Array:\n";
+    for(int x : arr) { // Range-based for loop for easy iteration
+        std::cout << x << " ";
+    }
+    std::cout << std::endl; // Output: 5 4 3 2 1
+    return 0;
+}
+```
+
+## 🧠 Time & Space Complexity (Exam Point)
+
+| Program           | Time Complexity | Extra Space Complexity |
+| :---------------- | :-------------- | :--------------------- |
+| Sum of Elements   | O(n)            | O(1)                   |
+| Maximum Element   | O(n)            | O(1)                   |
+| Reverse Array     | O(n)            | O(1)                   |
+
+---
