@@ -75,8 +75,8 @@ Loops are commonly used to process each element in an array.
 using namespace std; // Added for cout, endl
 
 int main() {
-    int a[] = {1, 2, 3, 4, 5};
-    int n = sizeof(a) / sizeof(a); // Calculate number of elements
+    int a[] = {1, 2, 3, 4, 5}; // Array of 5 integers
+    int n = sizeof(a) / sizeof(a[0]); // Calculate number of elements
 
     for(int i = 0; i < n; i++) {
         cout << a[i] << " ";
@@ -111,7 +111,7 @@ int main() {
     cout << "Size of an int in bytes: " << sizeof(int) << endl;   // Output: 4
 
     // Calculate the number of elements in a static array
-    int n = sizeof(a) / sizeof(a); // Corrected: Using a for element size
+    int n = sizeof(a) / sizeof(a[0]);
     cout << "Number of elements in 'a': " << n << endl; // Output: 3
     return 0;
 }
@@ -123,7 +123,7 @@ Accessing an array element using an index that is outside its valid range (0 to 
 
 ```cpp
 int arr = {1, 2, 3, 4, 5};
-cout << arr; // ❌ Dangerous! Accessing arr is out of bounds for a size-5 array.
+cout << arr; // ❌ Dangerous! Accessing arr is out of bounds for a size-5 array (valid indices 0-4).
 ```
 **Consequences of Out-of-Bounds Access:**
 *   It might print a garbage value.
