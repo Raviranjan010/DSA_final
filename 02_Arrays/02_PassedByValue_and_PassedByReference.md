@@ -172,45 +172,16 @@ int main() {
 | **Needs size param** | ❌ (for its own size)             | ✅ (to know its logical length in function) |
 
 🎯 **One-Line Exam Answer**: In C/C++, arrays are passed by reference because the array name decays into a pointer to the first element, so modifications inside the function affect the original array.
+## 5️⃣ MASTER TRICKS & POINTS TO REMEMBER (Function Parameter Passing)
 
-## 5️⃣ Decimal Number System (Base-10)
-Understanding number systems is foundational, especially when working with low-level concepts like memory and data representation. Computers fundamentally operate in binary, but we interact with them using decimal.
-
-### 🔹 What is a Number System?
-A number system defines how numbers are represented using digits and a base (radix).
-
-| Number System | Base | Digits Used | Example     |
-| :------------ | :--- | :---------- | :---------- |
-| **Decimal**   | 10   | 0–9         | 12, 99, 105 |
-| **Binary**    | 2    | 0, 1        | 101, 1100   |
-| **Octal**     | 8    | 0–7         | 17, 24      |
-| **Hexadecimal** | 16   | 0–9, A–F    | 1A, F2, B5  |
-
-### 🔹 Decimal System Breakdown
-The decimal system is the number system we use daily. It uses 10 unique digits (0–9). Each digit's position in a number represents a power of 10.
-
-**Example: Breakdown of `739`**
-*   `7` is in the hundreds place: $7 \times 10^2 = 700$
-*   `3` is in the tens place: $3 \times 10^1 = 30$
-*   `9` is in the units place: $9 \times 10^0 = 9$
-*   **Total**: $700 + 30 + 9 = 739$
-
-### 🔹 Why do computers use Binary?
-Computers are built from transistors, which act as tiny switches. These switches have only two stable states:
-*   **ON** (High Voltage) = **1**
-*   **OFF** (Low Voltage) = **0**
-This inherent two-state nature makes binary (base-2) the most natural and efficient number system for computers.
-
-## 6️⃣ MASTER TRICKS & POINTS TO REMEMBER
-
-### 💡 For Pass by Value/Reference:
+###  For Pass by Value/Reference:
 *   **Pass by Value**: Creates a copy. Original variable is safe from modification. Use for small, independent values.
 *   **Pass by Reference (`&`)**: Works directly on the original variable. Use when you need to modify the original variable or pass large objects efficiently (to avoid copying overhead).
 *   **Pass by Pointer (`*`)**: Similar to pass by reference in effect (modifies original), but uses explicit addresses and dereferencing. More flexible for dynamic memory.
 *   **Return ≠ Print**: `return` sends a value back to the caller; `cout` just displays it.
 
 ### 💡 For Arrays:
-*   **Array = Pointer Decay**: An array name, when passed to a function, decays into a pointer to its first element.
+*   **Array Name Decays to Pointer**: When an array name is passed to a function, it decays into a pointer to its first element.
 *   **Shared Memory**: Functions operate on the original array's memory.
 *   **`sizeof()` in Functions**: `sizeof(arr)` inside a function (where `arr` is a parameter) gives the size of the pointer, not the actual array size. Always pass the array's logical size as a separate argument.
 *   **Zero-Based Indexing**: The first element is at index `0`, the last at `size - 1`.
@@ -218,15 +189,10 @@ This inherent two-state nature makes binary (base-2) the most natural and effici
 
 ### 💡 For Pointers (General):
 *   **Pointer = Address Holder**: A pointer variable's *value* is a memory address.
-*   **`*` → Value**: The dereference operator (`*`) gives you the *value* at the address a pointer holds.
-*   **`&` → Address**: The address-of operator (`&`) gives you the *memory address* of a variable.
-*   **Always Initialize Pointers**: To avoid wild pointers and undefined behavior, initialize pointers to `nullptr` or a valid address.
-*   **Delete What You `new`**: For every `new` allocation, there must be a corresponding `delete` (or `delete[]` for arrays) to prevent memory leaks.
-*   **Never Dereference `nullptr`**: Always check if a pointer is not `nullptr` before dereferencing it.
 
-## 7️⃣ Common Mistakes & Pitfalls
+## 6️⃣ Common Mistakes & Pitfalls (Function Parameter Passing)
 
-### ❌ Pass by Value/Reference Mistakes:
+### ❌ Pass by Value/Reference Specific Mistakes:
 1.  **Expecting Pass by Value to Modify Original**: Forgetting that `int n` in `void func(int n)` is a copy.
 2.  **Forgetting `&` for Pass by Reference**: If you intend to modify the original variable but forget the `&`, it defaults to pass by value.
 
@@ -236,41 +202,12 @@ This inherent two-state nature makes binary (base-2) the most natural and effici
 3.  **Forgetting to Pass Array Size**: Without the size, iterating through the array in a function is prone to errors.
 4.  **Out-of-Bounds Access**: Accessing `arr[i]` where `i` is outside `0` to `size-1` leads to undefined behavior.
 
-### ❌ Pointer-Specific Mistakes:
-1.  **Using Uninitialized Pointers (Wild Pointers)**:
-    ```cpp
-    int* p; // 'p' is uninitialized, holds a random address
-    *p = 10; // ❌ CRASH/UNDEFINED BEHAVIOR
-    ```
-2.  **Forgetting to `delete` Dynamic Memory**: Leads to memory leaks.
-    ```cpp
-    int* p = new int;
-    // ... use p ...
-    // ❌ Forgot delete p;
-    ```
-3.  **Dereferencing a `nullptr`**:
-    ```cpp
-    int* p = nullptr;
-    // cout << *p; // ❌ CRASH
-    ```
-4.  **Dangling Pointers**: Using a pointer after the memory it points to has been deallocated.
-    ```cpp
-    int* p = new int(5);
-    delete p;
-    // cout << *p; // ❌ Dangling pointer access
-    p = nullptr; // Fix: set to nullptr after delete
-    ```
-5.  **Confusing `*p++` vs `(*p)++`**:
-    *   `*p++`: Increments the pointer `p`, then dereferences the *original* address `p` pointed to.
-    *   `(*p)++`: Increments the *value* at the address `p` points to.
-
 ### ❌ General C++ Mistakes:
 1.  **Assignment instead of Comparison**: `if (x = 5)` (assigns 5 to x, always true) instead of `if (x == 5)`.
 2.  **Uninitialized Local Variables**: Local non-static variables are not automatically initialized and contain garbage values.
 
----
 
-## 8️⃣ Example Code Snippets (Consolidated from context)
+## 7️⃣ Example Code Snippets
 
 ### 🔹 Array Name as Pointer
 ```cpp
@@ -279,11 +216,11 @@ using namespace std;
 int main(){
     int arr[]={1,3,5,23,12};
     int n= sizeof(arr)/sizeof(int);
-    cout<<"Address of array (arr): "<<arr<<endl;
-    cout<<"Value at first index (*arr): "<<*arr<<endl; // first index ie arr
-    cout<<"Value at second index (*(arr+1)): "<<*(arr+1)<<endl; // arr
-    cout<<"Address of array (&arr): "<<&arr<<endl;
-    cout<<"Address of first element (&arr): "<<&arr<<endl;
+    cout << "Address of array (arr): " << arr << endl;
+    cout << "Value at first index (*arr): " << *arr << endl; // first element
+    cout << "Value at second index (*(arr+1)): " << *(arr+1) << endl;
+    cout << "Address of array (&arr): " << &arr << endl; // Address of the array itself
+    cout << "Address of first element (&arr[0]): " << &arr[0] << endl; // Address of the first element
     return 0;
 }
 ```
